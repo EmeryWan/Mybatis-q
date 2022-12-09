@@ -15,9 +15,10 @@ public class ApiTest {
 
     @Test
     public void testMapperProxyFactory() {
-        MapperProxyFactory<IUserDao> factory = new MapperProxyFactory<>(IUserDao.class);
+        MapperProxyFactory<IUserDao> factory = new MapperProxyFactory<>(IUserDao.class);  // 给 IUserDao 添加代理
 
         // 模拟 sqlSession
+        // key: 执行的方法 ； value: 模拟返回的结果
         // （在框架中，真正的为开启数据库连接，在事务下，对数据库进行操作（ORM框架的真正内容））
         Map<String, String> sqlSession = new HashMap<>();
         sqlSession.put("cn.letout.mybatis.dao.IUserDao.queryUserName", "模拟执行 Mapper.xml 中 SQL 语句的操作：查询用户姓名");
