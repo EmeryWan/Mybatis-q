@@ -8,7 +8,7 @@ import cn.letout.mybatis.session.SqlSessionFactory;
 /**
  * 默认的 SqlSessionFactory
  *
- * 传递 configuration(mapperRegistry) 创建 DefaultSession，就可以在使用 SqlSession 时获取每个代理类的映射器对象
+ * 传递 mapperRegistry 创建 DefaultSession，就可以在使用 SqlSession 时获取每个代理类的映射器对象
  */
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
 
