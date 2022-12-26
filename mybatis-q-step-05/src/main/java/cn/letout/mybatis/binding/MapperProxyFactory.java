@@ -1,0 +1,43 @@
+package cn.letout.mybatis.binding;
+
+import cn.letout.mybatis.session.SqlSession;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * 映射器的代理工厂(简单工厂模式)
+ * 为代理类 MapperProxy 的包装，对外提供工厂实例化操作 MapperProxyFactory#newInstance
+ * 给每一个操作数据库的接口映射器注册代理的时候，为每一个 IDAO 接口生成代理类
+ */
+public class MapperProxyFactory<T> {
+
+    /**
+     * 给哪个接口进行代理（通过构造方法传入）
+     */
+    private final Class<T> mapperInterface;
+
+    private Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();
+
+    public MapperProxyFactory(Class<T> mapperInterface) {
+        this.mapperInterface = mapperInterface;
+    }
+
+    public Map<Method, MapperMethod> getMethodCache() {
+        return methodCache;
+    }
+
+    /**
+     * 工厂操作相当于把代理的创建给封装起来
+     * 如果不进行这层封装，那么每一个创建代理类的操作，都需要使用 Proxy.newProxyInstance 进行处理，比较麻烦
+     */
+    @SuppressWarnings("unchecked")
+    public T newInstance(SqlSession sqlSession) {
+        final MapperProxy<T> mapperProxy = new MapperProxy<T>(sqlSession, mapperInterface, methodCache);
+
+        // 代理操作
+        return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapperProxy);
+    }
+}
