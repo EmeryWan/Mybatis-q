@@ -17,6 +17,7 @@
         <module>mybatis-q-step-05</module>
         <module>mybatis-q-step-06</module>
         <module>mybatis-q-step-07</module>
+        <module>mybatis-q-step-08</module>
     </modules>
 
     <properties>

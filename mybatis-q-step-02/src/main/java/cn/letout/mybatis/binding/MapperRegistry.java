@@ -15,6 +15,8 @@ import java.util.Set;
 public class MapperRegistry {
 
     // 存放已添加的映射器代理
+    // key: cn.letout.mybatis.dao.IUserDao
+    // value: dao 接口对应的 MapperProxyFactory，用来生成对应接口的代理对象
     private final Map<Class<?>, MapperProxyFactory<?>> knownMappers = new HashMap<>();
 
     /**
@@ -34,6 +36,9 @@ public class MapperRegistry {
         }
     }
 
+    /**
+     * 添加一个 dao 接口对应的 代理对象生成工厂
+     */
     public <T> void addMapper(Class<T> type) {
         // Mapper 是接口才会注册
         if (type.isInterface()) {

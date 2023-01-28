@@ -36,6 +36,26 @@ public class ParameterMapping {
             return this;
         }
 
+        public ParameterMapping build() {
+            return parameterMapping;
+        }
+
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public Class<?> getJavaType() {
+        return javaType;
+    }
+
+    public JdbcType getJdbcType() {
+        return jdbcType;
     }
 
 }

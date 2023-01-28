@@ -13,7 +13,7 @@ public class MapperProxyFactory<T> {
     /**
      * 给哪个接口进行代理（通过构造方法传入）
      */
-    private final Class<T> mapperInterface;
+    private final Class<T> mapperInterface;  // interface cn.letout.mybatis.dao.IUserDao
 
     public MapperProxyFactory(Class<T> mapperInterface) {
         this.mapperInterface = mapperInterface;
@@ -27,6 +27,11 @@ public class MapperProxyFactory<T> {
         final MapperProxy<T> mapperProxy = new MapperProxy<T>(sqlSession, mapperInterface);
 
         // 代理操作
-        return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapperProxy);
+        return (T) Proxy.newProxyInstance(
+                mapperInterface.getClassLoader(),  // 类加载器
+                new Class[]{mapperInterface},  // 需要实现的接口数组（代理对象实现了哪个接口）
+                mapperProxy  // InvocationHandler 实现类（代理对象中的方法，怎么做）
+        );
     }
+
 }

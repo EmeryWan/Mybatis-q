@@ -16,6 +16,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 
     // 传入的参数（后期完善）
     private Map<String, String> sqlSession;
+
     // 给哪个接口进行代理
     private final Class<T> mapperInterface;
 
