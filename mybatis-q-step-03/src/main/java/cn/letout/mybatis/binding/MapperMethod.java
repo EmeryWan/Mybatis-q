@@ -19,6 +19,9 @@ public class MapperMethod {
         this.command = new SqlCommand(configuration, mapperInterface, method);
     }
 
+    /**
+     * 最终执行 sqlSession 中的业务方法
+     */
     public Object execute(SqlSession sqlSession, Object[] args) {
         Object result = null;
         switch (command.getType()) {
@@ -39,7 +42,7 @@ public class MapperMethod {
 
     @Getter
     public static class SqlCommand {
-        private final String name;  // id
+        private final String name;  // id->cn.letout.mybatis.dao.IUserDao.queryUserInfoById
         private final SqlCommandType type;
 
         public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) {

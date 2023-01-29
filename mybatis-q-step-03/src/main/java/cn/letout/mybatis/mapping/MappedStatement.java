@@ -1,15 +1,14 @@
 package cn.letout.mybatis.mapping;
 
 import cn.letout.mybatis.session.Configuration;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Map;
 
 /**
- * 映射语句类
- * 用于记录 SQL 信息：SQL 类型、SQL 语句、入参类型、出参类型
+ * 被映射的语句类
+ * SQL 信息记录对象，用于记录 SQL 信息：SQL 类型、SQL 语句、入参类型、出参类型
  */
 @Getter
 @Setter

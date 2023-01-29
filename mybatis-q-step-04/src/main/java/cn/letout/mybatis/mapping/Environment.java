@@ -1,11 +1,9 @@
 package cn.letout.mybatis.mapping;
 
 import cn.letout.mybatis.transaction.TransactionFactory;
-import lombok.Getter;
 
 import javax.sql.DataSource;
 
-@Getter
 public class Environment {
 
     // 环境 id
@@ -49,6 +47,18 @@ public class Environment {
         public Environment build() {
             return new Environment(this.id, this.transactionFactory, this.dataSource);
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public TransactionFactory getTransactionFactory() {
+        return transactionFactory;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
     }
 
 }
