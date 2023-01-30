@@ -3,10 +3,18 @@
 
 - 解析配置
 - 建立事务框架
-- 引入 DRUID 连接池
+- 引入 DRUID 创建连接
 - 初步完成 SQL 的执行 和 结果简单包装
 
 ![](../imgs/04/1.png)
+
+### 🎨 设计
+
+- 创建 TypeAliasRegistry 类型别名注册器，放入 Configuration 中，初始化时，将基本类型和需要使用到的类注册进去
+- 解析 XML config 中的 DataSource，将所需要的配置放入 DataSourceFactory
+- 封装事务信息（获取连接、提交、回滚、关闭等），并利用事务工厂创建事务
+- 将 SQL 相关的信息封装为 BoundSql（参数类型、参数列表、SQL、返回值类型等）
+- 使用 Environment 聚合 数据源 dataSource 和 事务工厂 transactionFactory，并放入 Configuration 中
 
 ```
 mybatis-q-step-04
@@ -25,14 +33,14 @@ mybatis-q-step-04
     │           │   └── BaseBuilder.java
     │           ├── datasource
     │           │   ├── druid
-    │           │   │   └── DruidDataSourceFactory.java  # 利用 XML 数据源配置 和 Druid 构建数据源 dataSource（也就是与数据库的连接）
+    │           │   │   └── DruidDataSourceFactory.java  # 利用 XML 数据源配置 和 Druid 构建数据源 dataSource
     │           │   └── DataSourceFactory.java  # interface 数据源工厂
     │           ├── io
     │           │   └── Resources.java
     │           ├── mapping
     │           │   ├── BoundSql.java  # 解析格式化好的 SQL 语句的封装
-    │           │   ├── Environment.java  # 根据 XML 中解析的数据源信息生成的环境 dataSource transactionFactory
-    │           │   ├── MappedStatement.java  # 记录 SQL 信息：SQL 类型，语句、入参、出参
+    │           │   ├── Environment.java  # 根据 XML 中解析的数据源信息生成的环境，包含数据源 dataSource、事务工厂 transactionFactory，使用数据源 dataSource 来获取连接
+    │           │   ├── MappedStatement.java  # 记录解析出来的 SQL 信息：SQL 类型，语句、入参、出参
     │           │   ├── ParameterMapping.java  # 参数映射 jdbc type <---> java type
     │           │   └── SqlCommandType.java
     │           ├── session

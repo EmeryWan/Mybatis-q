@@ -49,6 +49,7 @@ public class PooledConnection implements InvocationHandler {
         this.createdTimestamp = System.currentTimeMillis();
         this.lastUsedTimestamp = System.currentTimeMillis();
         this.valid = true;
+        // 当创建池化连接时，为其创建代理对象，当调用方法时就会被反射拦截，对方法进行增强
         this.proxyConnection = (Connection) Proxy.newProxyInstance(Connection.class.getClassLoader(), IFACES, this);
     }
 

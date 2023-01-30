@@ -39,8 +39,9 @@ public class PooledDataSource implements DataSource {
     protected int poolMaximumCheckoutTime = 20000;
 
     /**
-     * 连接池一个打印日志状态机会的低层次设置，以及重新尝试获得连接
-     * 这些情况下，往往需要很长时间，为了避免连接池没有配置时静默失败
+     * （1）连接池一个打印日志状态机会的低层次设置，
+     * （2）重新尝试获得连接（popConnection 中，如果活跃连接池已满，不存在执行过程超时的连接，进行等待一会，进行下一轮的循环），
+     * 这些情况下，往往需要很长时间，才能继续执行，为了避免连接池没有配置时静默失败，设置的休眠时间
      */
     protected int poolTimeToWait = 20000;
 
@@ -75,14 +76,17 @@ public class PooledDataSource implements DataSource {
      */
     protected void pushConnection(PooledConnection connection) throws SQLException {
         synchronized (state) {
-            // 在活跃小鹌鹑中移除该链接
+            // 在活跃连接 List 中移除该连接
             state.activeConnections.remove(connection);
+
             // 判断链接是否有效
             if (connection.isValid()) {
+
                 // 如果 空闲连接数 < 设定的最大空闲数量
                 if (state.idleConnections.size() < poolMaximumIdleConnections
-                        && connection.getConnectionTypeCode() == expectedConnectionTypeCode) {
-                    state.accumulatedCheckoutTime += connection.getCheckoutTime();
+                        && connection.getConnectionTypeCode() == expectedConnectionTypeCode
+                ) {
+                    state.accumulatedCheckoutTime += connection.getCheckoutTime();  // 累计检查时间
                     // 检查连接是否自动提交（否则手动回滚）
                     if (!connection.getRealConnection().getAutoCommit()) {
                         connection.getRealConnection().rollback();
@@ -113,7 +117,7 @@ public class PooledDataSource implements DataSource {
                 }
             } else {
                 log.info("A bad connection (" + connection.getRealHashCode() + ") attempted to return to the pool, discarding connection.");
-                state.badConnectionCount++;
+                state.badConnectionCount++;  // 累计的无用连接数
             }
         }
     }
@@ -149,11 +153,11 @@ public class PooledDataSource implements DataSource {
                         long longestCheckoutTime = oldestActiveConnection.getCheckoutTime();
                         // 如果 checkout 时间过长，则标记这个连接过期
                         if (longestCheckoutTime > poolMaximumCheckoutTime) {
-                            state.claimedOverdueConnectionCount++;
-                            state.accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;
-                            state.accumulatedCheckoutTime += longestCheckoutTime;
+                            state.claimedOverdueConnectionCount++;  // 过度请求连接数量
+                            state.accumulatedCheckoutTimeOfOverdueConnections += longestCheckoutTime;  // 过去请求连接的检查时间
+                            state.accumulatedCheckoutTime += longestCheckoutTime;  // 累计检查时间
                             state.activeConnections.remove(oldestActiveConnection);
-                            if (!oldestActiveConnection.getRealConnection().getAutoCommit()) {
+                            if (!oldestActiveConnection.getRealConnection().getAutoCommit()) {  // 回滚该事务
                                 oldestActiveConnection.getRealConnection().rollback();
                             }
                             // 删掉最老的连接，然后重新实例化一个新的连接
@@ -219,6 +223,7 @@ public class PooledDataSource implements DataSource {
 
     /**
      * 强制关闭所有连接
+     * 同时会用户池化资源初始化创建空的连接池
      */
     public void forceCloseAll() {
         synchronized (state) {

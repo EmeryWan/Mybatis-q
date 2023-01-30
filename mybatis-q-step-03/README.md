@@ -40,7 +40,7 @@ mybatis-q-step-03
     │           ├── io
     │           │   └── Resources.java  # 通过文件名，获取输入流
     │           ├── mapping
-    │           │   ├── MappedStatement.java  # 被映射的语句类，用于记录 SQL 信息：SQL 类型，语句、入参、出参
+    │           │   ├── MappedStatement.java  # 被映射的语句类，用于记录解析出来的 SQL 信息：SQL 类型，语句、入参、出参
     │           │   └── SqlCommandType.java  # enum 定义所有 SQL 的类型
     │           └── session
     │               ├── defaults
