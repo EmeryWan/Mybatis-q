@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 /**
  * 参数表达式
+ *
+ * 解析 property、javaType、jdbcType
  */
 public class ParameterExpression extends HashMap<String, String> {
 

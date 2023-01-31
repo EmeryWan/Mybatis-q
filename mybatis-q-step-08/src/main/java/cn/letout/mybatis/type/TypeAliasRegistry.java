@@ -8,6 +8,8 @@ import java.util.Map;
 
 /**
  * 类型别名注册器
+ *
+ * 解析 XML 时，一些配置的参数可以解析到对应的类型（如: pooled -> class cn.letout.mybatis.datasource.pooled.PooledDataSourceFactory"）
  */
 public class TypeAliasRegistry {
 

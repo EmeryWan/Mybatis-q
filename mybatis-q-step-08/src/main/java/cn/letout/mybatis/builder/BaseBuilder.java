@@ -2,6 +2,7 @@ package cn.letout.mybatis.builder;
 
 import cn.letout.mybatis.session.Configuration;
 import cn.letout.mybatis.type.TypeAliasRegistry;
+import cn.letout.mybatis.type.TypeHandlerRegistry;
 
 public abstract class BaseBuilder {
 

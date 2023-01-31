@@ -22,8 +22,11 @@ public class SimpleExecutor extends BaseExecutor {
     }
 
     /**
-     * 在这个方法中包装数据源的获取、语句处理器的创建、以及对 Statement 的实例化和相关参数的设置
-     * 最后执行 SQL 处理、返回结果
+     * 在这个方法中包装数据源的获取、
+     * 语句处理器的创建、
+     * 以及对 Statement 的实例化和相关参数的设置
+     * 最后执行 SQL 处理
+     * 返回结果
      */
     @Override
     protected <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {

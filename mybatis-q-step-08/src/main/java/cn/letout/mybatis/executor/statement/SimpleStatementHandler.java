@@ -25,6 +25,10 @@ public class SimpleStatementHandler extends BaseStatementHandler {
         return connection.createStatement();
     }
 
+    /**
+     * 该处理器处理没有参数的情况
+     * 不设置参数
+     */
     @Override
     public void parameterize(Statement statement) throws SQLException {
         // N/A

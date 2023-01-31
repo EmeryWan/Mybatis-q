@@ -1,21 +1,19 @@
 package cn.letout.mybatis.mapping;
 
 import cn.letout.mybatis.transaction.TransactionFactory;
-import lombok.Getter;
 
 import javax.sql.DataSource;
 
-@Getter
 public class Environment {
 
     // 环境 id
-    private final String id;
+    private final String id;  // development
 
     // 事务工厂
     private final TransactionFactory transactionFactory;
 
-    // 数据源
-    private final DataSource dataSource;
+    // 数据源  javax.sql.DataSource
+    private final DataSource dataSource;  // 实际的 DataSource 实现类。在这里的实现有：cn.letout.mybatis.datasource -> (PooledDataSource UnpooledDataSource DruidDataSource)
 
     public Environment(String id, TransactionFactory transactionFactory, DataSource dataSource) {
         this.id = id;
@@ -51,4 +49,16 @@ public class Environment {
         }
     }
 
+
+    public String getId() {
+        return id;
+    }
+
+    public TransactionFactory getTransactionFactory() {
+        return transactionFactory;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
 }

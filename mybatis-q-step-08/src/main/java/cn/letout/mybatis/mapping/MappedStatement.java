@@ -14,13 +14,13 @@ public class MappedStatement {
 
     private Configuration configuration;
 
-    private String id;
+    private String id;  // 接口的全限定名 cn.letout.mybatis.dao.IUserDao.queryUserInfoById
 
-    private SqlCommandType sqlCommandType;
+    private SqlCommandType sqlCommandType;  // enum -> SELECT
 
-    private SqlSource sqlSource;
+    private SqlSource sqlSource;  // SQL 信息 eg: staticSqlSource
 
-    private Class<?> resultType;
+    private Class<?> resultType;  // 返回类型
 
     // 禁用构造
     MappedStatement() {

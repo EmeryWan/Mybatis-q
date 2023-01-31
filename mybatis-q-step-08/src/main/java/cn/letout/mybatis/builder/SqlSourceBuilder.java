@@ -13,6 +13,8 @@ import java.util.Map;
 
 /**
  * SQL 源码构建器
+ *
+ * 用来具体处理 SQL 中的参数
  */
 public class SqlSourceBuilder extends BaseBuilder {
 
@@ -23,7 +25,10 @@ public class SqlSourceBuilder extends BaseBuilder {
     }
 
     public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
+        // 获取 #{} 中的参数，将获取的参数封装为 ParameterMapping，并放入 BoundSql
         ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
+
+        // 解析 #{ }
         GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
         String sql = parser.parse(originalSql);
         // 返回静态 SQL

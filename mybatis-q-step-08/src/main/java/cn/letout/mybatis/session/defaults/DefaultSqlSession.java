@@ -1,16 +1,10 @@
 package cn.letout.mybatis.session.defaults;
 
-import cn.letout.mybatis.binding.MapperRegistry;
 import cn.letout.mybatis.executor.Executor;
-import cn.letout.mybatis.mapping.BoundSql;
-import cn.letout.mybatis.mapping.Environment;
 import cn.letout.mybatis.mapping.MappedStatement;
 import cn.letout.mybatis.session.Configuration;
 import cn.letout.mybatis.session.SqlSession;
 
-import java.lang.reflect.Method;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultSqlSession implements SqlSession {
@@ -34,8 +28,8 @@ public class DefaultSqlSession implements SqlSession {
      */
     @Override
     public <T> T selectOne(String statement, Object parameter) {
-        MappedStatement ms = configuration.getMappedStatement(statement);
-        List<T> list = executor.query(ms, parameter, Executor.NO_RESULT_HANDLER, ms.getBoundSql());
+        MappedStatement mappedStatement = configuration.getMappedStatement(statement);
+        List<T> list = executor.query(mappedStatement, parameter, Executor.NO_RESULT_HANDLER, mappedStatement.getSqlSource().getBoundSql(parameter));
         return list.get(0);
     }
 

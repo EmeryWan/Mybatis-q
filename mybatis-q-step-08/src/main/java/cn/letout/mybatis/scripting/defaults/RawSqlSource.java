@@ -1,5 +1,6 @@
 package cn.letout.mybatis.scripting.defaults;
 
+import cn.letout.mybatis.builder.SqlSourceBuilder;
 import cn.letout.mybatis.mapping.BoundSql;
 import cn.letout.mybatis.mapping.SqlSource;
 import cn.letout.mybatis.scripting.xmltags.DynamicContext;
@@ -13,17 +14,25 @@ import java.util.HashMap;
  */
 public class RawSqlSource implements SqlSource {
 
-    private final SqlSource sqlSource;
+    private final SqlSource sqlSource;  // StaticSqlSource
 
+    /**
+     * 在构造方法中，会实例化 SqlSourceBuilder，将 RawSqlSource -> StaticSqlSource
+     */
     public RawSqlSource(Configuration configuration, SqlNode rootSqlNode, Class<?> parameterType) {
         this(configuration, getSql(configuration, rootSqlNode), parameterType);
     }
 
     public RawSqlSource(Configuration configuration, String sql, Class<?> parameterType) {
         SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
+
         Class<?> clazz = parameterType == null ? Object.class : parameterType;
         sqlSource = sqlSourceParser.parse(sql, clazz, new HashMap<>());
     }
+
+
+    //
+
 
     @Override
     public BoundSql getBoundSql(Object parameterObject) {

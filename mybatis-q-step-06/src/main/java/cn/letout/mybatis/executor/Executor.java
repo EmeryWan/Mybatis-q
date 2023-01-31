@@ -10,8 +10,7 @@ import java.util.List;
 
 /**
  * 执行器接口
- *
- * 包含事务相关的方法、SQL 查询的操作（后续功能迭代会继续补充）
+ * 定义标准的执行过程：执行方法，事务获取，提交、回滚、关闭的定义
  */
 public interface Executor {
 

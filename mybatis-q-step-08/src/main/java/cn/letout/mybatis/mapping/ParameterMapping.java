@@ -5,16 +5,18 @@ import cn.letout.mybatis.type.JdbcType;
 
 /**
  * 参数映射
+ *
+ * javaType <---> jdbcType
  */
 public class ParameterMapping {
 
     private Configuration configuration;
 
-    private String property;
+    private String property;  // 参数名称，eg: id
 
-    private Class<?> javaType = Object.class;  // int
+    private Class<?> javaType = Object.class;  // 参数的 java 类型，eg: java.lang.Long
 
-    private JdbcType jdbcType;  // numeric
+    private JdbcType jdbcType;  //
 
 
     public static class Builder {

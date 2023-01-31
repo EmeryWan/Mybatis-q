@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * 语句处理器
+ * 是 SQL 执行器的依赖部分
+ * 用于准备语句、参数化传递、执行 SQL、封装结果
  */
 public interface StatementHandler {
 

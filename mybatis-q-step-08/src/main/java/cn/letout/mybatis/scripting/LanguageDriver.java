@@ -7,6 +7,8 @@ import org.dom4j.Element;
 
 /**
  * 语言脚本驱动
+ *
+ * 提供创建 SQL 信息的方法
  */
 public interface LanguageDriver {
 

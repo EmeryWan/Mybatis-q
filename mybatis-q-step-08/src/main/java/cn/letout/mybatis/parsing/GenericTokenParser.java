@@ -2,7 +2,7 @@ package cn.letout.mybatis.parsing;
 
 /**
  * 普通记号处理器
- * 处理 #{} ${}
+ * 解析 #{} ${}
  */
 public class GenericTokenParser {
 

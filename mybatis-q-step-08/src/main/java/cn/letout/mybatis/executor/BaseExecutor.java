@@ -12,7 +12,11 @@ import java.util.List;
 
 /**
  * 执行器抽象基类
+ * 模板模式
+ *
  * 封装了执行器的全部接口，具体的子类继承抽象类后，就不用再处理这些共性的方法
+ *
+ * Mybatis 还有一些缓存的操作也实现在该类中，占时忽略
  */
 @Slf4j
 public abstract class BaseExecutor implements Executor {

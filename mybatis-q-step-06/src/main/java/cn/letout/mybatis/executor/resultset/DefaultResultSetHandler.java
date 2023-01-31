@@ -9,6 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 默认的 Map 结果处理器
+ */
 public class DefaultResultSetHandler implements ResultSetHandler {
 
     private final BoundSql boundSql;

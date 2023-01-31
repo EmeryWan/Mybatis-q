@@ -11,6 +11,8 @@ import java.util.List;
 
 /**
  * XML 脚本构建器
+ *
+ * 将 SQL 用 StaticTextSqlNode 包装，再使用 MixedSqlNode 包装，用于实例化 RawSqlSource
  */
 public class XMLScriptBuilder extends BaseBuilder {
 
@@ -27,14 +29,14 @@ public class XMLScriptBuilder extends BaseBuilder {
     }
 
     public SqlSource parseScriptNode() {
-        List<SqlNode> contents = parseDynamicTags(element);
+        List<SqlNode> contents = this.parseDynamicTags(element);
         MixedSqlNode rootSqlNode = new MixedSqlNode(contents);
         return new RawSqlSource(configuration, rootSqlNode, parameterType);
     }
 
     public List<SqlNode> parseDynamicTags(Element element) {
         List<SqlNode> contents = new ArrayList<>();
-        String data = element.getText(); // 拿到 SQL
+        String data = element.getText();  // 拿到 SQL
         contents.add(new StaticTextSqlNode(data));
         return contents;
     }

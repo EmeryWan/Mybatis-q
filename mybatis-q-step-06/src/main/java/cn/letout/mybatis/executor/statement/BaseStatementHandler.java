@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * 语句处理器抽象基类
+ * 语句处理器抽象基类（模板模式）
  *
  * 将参数信息、结果信息 进行封装处理
  */

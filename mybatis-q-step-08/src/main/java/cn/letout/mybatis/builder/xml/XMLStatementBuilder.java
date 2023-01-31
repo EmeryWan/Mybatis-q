@@ -15,7 +15,7 @@ import java.util.Locale;
  */
 public class XMLStatementBuilder extends BaseBuilder {
 
-    private String currentNamespace;
+    private String currentNamespace;  // cn.letout.mybatis.dao.IUserDao
 
     private Element element;
 
@@ -27,8 +27,8 @@ public class XMLStatementBuilder extends BaseBuilder {
 
     // 解析语句(select|insert|update|delete)
     // <select
-    //   id="selectPerson"
-    //   parameterType="int"
+    //   id="queryUserInfoById"
+    //   parameterType="java.lang.Long"
     //   parameterMap="deprecated"
     //   resultType="hashmap"
     //   resultMap="personResultMap"
@@ -37,7 +37,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     //   timeout="10000"
     //   fetchSize="256"
     //   statementType="PREPARED"
-    //   resultSetType="FORWARD_ONLY"
+    //   resultSetType="cn.letout.mybatis.po.User"
     // >
     //   SELECT * FROM PERSON WHERE ID = #{id}
     //</select>
@@ -45,11 +45,11 @@ public class XMLStatementBuilder extends BaseBuilder {
         String id = element.attributeValue("id");
 
         // 参数类型
-        String parameterType = element.attributeValue("parameterType");
+        String parameterType = element.attributeValue("parameterType");  // java.lang.Long
         Class<?> parameterTypeClass = resolveAlias(parameterType);
 
         // 结果类型
-        String resultType = element.attributeValue("resultType");
+        String resultType = element.attributeValue("resultType");  // cn.letout.mybatis.po.User
         Class<?> resultTypeClass = resolveAlias(resultType);
 
         // 命令类型 select / insert / update / delete
@@ -58,19 +58,19 @@ public class XMLStatementBuilder extends BaseBuilder {
 
         // 获取默认语言驱动器
         Class<?> langClass = configuration.getLanguageRegistry().getDefaultDriverClass();
-        LanguageDriver langDriver = configuration.getLanguageRegisty().getDriver(langClass);
+        LanguageDriver langDriver = configuration.getLanguageRegistry().getDriver(langClass);
 
-        SqlSource sqlSource = langDriver.createSqlSource(configuration, element, parameterTypeClass);
+        SqlSource sqlSource = langDriver.createSqlSource(configuration, element, parameterTypeClass);  // StaticSqlSource
 
         MappedStatement mappedStatement = new MappedStatement.Builder(
                 configuration,
-                currentNamespace + "." + id,
+                currentNamespace + "." + id,  // cn.letout.mybatis.dao.IUserDao.queryUserInfoById
                 sqlCommandType,
                 sqlSource,
                 resultTypeClass
         ).build();
 
-        // 添加解析 SQL
+        // 将解析完的语句添加到 Configuration 配置文件中的 Map<String, MappedStatement> 中
         configuration.addMappedStatement(mappedStatement);
     }
 

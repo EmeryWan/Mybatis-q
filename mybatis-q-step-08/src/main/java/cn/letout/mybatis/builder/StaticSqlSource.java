@@ -8,7 +8,7 @@ import cn.letout.mybatis.session.Configuration;
 import java.util.List;
 
 /**
- * 静态 SQL 源码
+ * 静态 SQL（简单的通过条件的查询语句，或操作语句）
  */
 public class StaticSqlSource implements SqlSource {
 

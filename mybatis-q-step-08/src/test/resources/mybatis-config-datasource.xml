@@ -9,9 +9,9 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value=""/>
-                <property name="username" value=""/>
-                <property name="password" value=""/>
+                <property name="url" value="jdbc:mysql://124.220.5.10:3306/mybatis?useUnicode=true"/>
+                <property name="username" value="emery"/>
+                <property name="password" value="mysql.letout.cn"/>
             </dataSource>
         </environment>
     </environments>

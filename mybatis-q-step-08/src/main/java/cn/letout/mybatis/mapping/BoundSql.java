@@ -15,9 +15,9 @@ public class BoundSql {
 
     private String sql;  // 格式化好的 SQL，参数被替换成了 ?
 
-    private List<ParameterMapping> parameterMappings;
+    private List<ParameterMapping> parameterMappings;  // 该 SQL 的所有参数信息：参数名、参数 java 类别、参数 jdbc 类别
 
-    private Object parameterObject;
+    private Object parameterObject;  // 参数对象的值 eg: where id = #{1} 这里就是 1
 
     private Map<String, String> additionalParameters;
 
