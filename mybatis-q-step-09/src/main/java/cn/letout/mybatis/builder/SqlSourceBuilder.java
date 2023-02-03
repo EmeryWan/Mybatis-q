@@ -4,8 +4,11 @@ import cn.letout.mybatis.mapping.ParameterMapping;
 import cn.letout.mybatis.mapping.SqlSource;
 import cn.letout.mybatis.parsing.GenericTokenParser;
 import cn.letout.mybatis.parsing.TokenHandler;
+import cn.letout.mybatis.reflection.MetaClass;
 import cn.letout.mybatis.reflection.MetaObject;
 import cn.letout.mybatis.session.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,8 @@ import java.util.Map;
  * 用来具体处理 SQL 中的参数
  */
 public class SqlSourceBuilder extends BaseBuilder {
+
+    private static Logger log = LoggerFactory.getLogger(SqlSourceBuilder.class);
 
     private static final String parameterProperties = "javaType,jdbcType,mode,numericScale,resultMap,typeHandler,jdbcTypeName";
 
@@ -63,11 +68,26 @@ public class SqlSourceBuilder extends BaseBuilder {
         }
 
         private ParameterMapping buildParameterMapping(String content) {
-            // 解析映射参数，转化成一个 HashMap
+            // 解析映射参数 -> 转化成一个 HashMap
             // #{favouriteSection,jdbcType=VARCHAR}
             Map<String, String> propertiesMap = new ParameterExpression(content);
             String property = propertiesMap.get("property");
+
             Class<?> propertyType = parameterType;
+            if (typeHandlerRegistry.hasTypeHandler(parameterType)) {  // 有对应的参数处理器 -> 基本类型
+                propertyType = parameterType;
+            } else if (property != null) {
+                MetaClass metaClass = MetaClass.forClass(parameterType);
+                if (metaClass.hasGetter(property)) {
+                    propertyType = metaClass.getGetterType(property);
+                } else {
+                    propertyType = Object.class;
+                }
+            } else {  // 无参数
+                propertyType = Object.class;
+            }
+
+            log.info("够建参数映射 property: {} propertyType: {}", property, propertyType);
             ParameterMapping.Builder builder = new ParameterMapping.Builder(configuration, property, propertyType);
             return builder.build();
         }

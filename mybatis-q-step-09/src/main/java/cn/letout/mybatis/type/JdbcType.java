@@ -19,6 +19,8 @@ public enum JdbcType {
 
     VARCHAR(Types.VARCHAR),
 
+    CHAR(Types.CHAR),
+
     TIMESTAMP(Types.TIMESTAMP),
 
     ;

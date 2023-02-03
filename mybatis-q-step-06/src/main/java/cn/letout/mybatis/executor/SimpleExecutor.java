@@ -32,10 +32,19 @@ public class SimpleExecutor extends BaseExecutor {
     protected <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
         try {
             Configuration configuration = ms.getConfiguration();
+
             StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, resultHandler, boundSql);
+
+            // 获取连接
             Connection connection = transaction.getConnection();
+
+            // 准备语句
             Statement stmt = handler.prepare(connection);
+
+            // 设置参数
             handler.parameterize(stmt);
+
+            // 执行
             return handler.query(stmt, resultHandler);
         } catch (SQLException e) {
             e.printStackTrace();

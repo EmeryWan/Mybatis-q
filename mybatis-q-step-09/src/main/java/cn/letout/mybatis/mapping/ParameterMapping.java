@@ -2,6 +2,8 @@ package cn.letout.mybatis.mapping;
 
 import cn.letout.mybatis.session.Configuration;
 import cn.letout.mybatis.type.JdbcType;
+import cn.letout.mybatis.type.TypeHandler;
+import cn.letout.mybatis.type.TypeHandlerRegistry;
 
 /**
  * 参数映射
@@ -16,7 +18,12 @@ public class ParameterMapping {
 
     private Class<?> javaType = Object.class;  // 参数的 java 类型，eg: java.lang.Long
 
-    private JdbcType jdbcType;  //
+    private JdbcType jdbcType;
+
+    private TypeHandler<?> typeHandler;
+
+    private ParameterMapping() {
+    }
 
 
     public static class Builder {
@@ -40,6 +47,12 @@ public class ParameterMapping {
         }
 
         public ParameterMapping build() {
+            if (parameterMapping.typeHandler == null && parameterMapping.javaType != null) {
+                Configuration configuration = parameterMapping.configuration;
+                TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+                parameterMapping.typeHandler = typeHandlerRegistry.getTypeHandler(parameterMapping.javaType, parameterMapping.jdbcType);
+            }
+
             return parameterMapping;
         }
     }
@@ -59,4 +72,9 @@ public class ParameterMapping {
     public JdbcType getJdbcType() {
         return jdbcType;
     }
+
+    public TypeHandler<?> getTypeHandler() {
+        return typeHandler;
+    }
+
 }

@@ -1,5 +1,6 @@
 package cn.letout.mybatis.mapping;
 
+import cn.letout.mybatis.scripting.LanguageDriver;
 import cn.letout.mybatis.session.Configuration;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,8 @@ public class MappedStatement {
 
     private Class<?> resultType;  // 返回类型
 
+    private LanguageDriver lang;
+
     // 禁用构造
     MappedStatement() {
     }
@@ -36,6 +39,7 @@ public class MappedStatement {
             mappedStatement.sqlCommandType = sqlCommandType;
             mappedStatement.sqlSource = sqlSource;
             mappedStatement.resultType = resultType;
+            mappedStatement.lang = configuration.getDefaultScriptingLanguageInstance();
         }
 
         public MappedStatement build() {
@@ -63,6 +67,10 @@ public class MappedStatement {
 
     public Class<?> getResultType() {
         return resultType;
+    }
+
+    public LanguageDriver getLang() {
+        return lang;
     }
 
 }
