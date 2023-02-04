@@ -7,6 +7,7 @@ import cn.letout.mybatis.mapping.BoundSql;
 import cn.letout.mybatis.mapping.MappedStatement;
 import cn.letout.mybatis.session.Configuration;
 import cn.letout.mybatis.session.ResultHandler;
+import cn.letout.mybatis.session.RowBounds;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,17 +32,20 @@ public abstract class BaseStatementHandler implements StatementHandler {
 
     protected final ResultSetHandler resultSetHandler;
 
+    protected final RowBounds rowBounds;
+
     protected BoundSql boundSql;
 
-    public BaseStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, ResultHandler resultHandler, BoundSql boundSql) {
+    public BaseStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         this.configuration = mappedStatement.getConfiguration();
         this.executor = executor;
         this.mappedStatement = mappedStatement;
+        this.rowBounds = rowBounds;
         this.boundSql = boundSql;
 
         this.parameterObject = parameterObject;
         this.parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
-        this.resultSetHandler = configuration.newResultSetHandler(executor, mappedStatement, boundSql);
+        this.resultSetHandler = configuration.newResultSetHandler(executor, mappedStatement, rowBounds, resultHandler, boundSql);
     }
 
     @Override

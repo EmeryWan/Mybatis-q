@@ -1,6 +1,7 @@
 package cn.letout.mybatis.builder.xml;
 
 import cn.letout.mybatis.builder.BaseBuilder;
+import cn.letout.mybatis.builder.MapperBuilderAssistant;
 import cn.letout.mybatis.io.Resources;
 import cn.letout.mybatis.session.Configuration;
 import org.dom4j.Document;
@@ -18,13 +19,14 @@ public class XMLMapperBuilder extends BaseBuilder {
 
     private Element element;
 
-    private String resource;
+    private MapperBuilderAssistant builderAssistant;
 
-    private String currentNamespace;
+    private String resource;
 
 
     public XMLMapperBuilder(Document document, Configuration configuration, String resource) {
         super(configuration);
+        this.builderAssistant = new MapperBuilderAssistant(configuration, resource);
         this.element = document.getRootElement();
         this.resource = resource;
     }
@@ -41,7 +43,7 @@ public class XMLMapperBuilder extends BaseBuilder {
             // 标记一下已经加载
             configuration.addLoadedResource(resource);
             // 将 namespace 绑定到 Mapper 上
-            configuration.addMapper(Resources.classForName(currentNamespace));
+            configuration.addMapper(Resources.classForName(builderAssistant.getCurrentNamespace()));
         }
     }
 
@@ -53,10 +55,11 @@ public class XMLMapperBuilder extends BaseBuilder {
     // </mapper>
     private void configurationElement(Element element) {
         // 配置 namespace
-        currentNamespace = element.attributeValue("namespace");
-        if (currentNamespace.equals("")) {
+        String namespace = element.attributeValue("namespace");
+        if (namespace.equals("")) {
             throw new RuntimeException("Mapper's namespace cannot be empty");
         }
+        builderAssistant.setCurrentNamespace(namespace);
 
         // 配置 select / insert / update / delete
         buildStatementFromContext(element.elements("select"));
@@ -64,8 +67,8 @@ public class XMLMapperBuilder extends BaseBuilder {
 
     private void buildStatementFromContext(List<Element> list) {
         for (Element element : list) {
-            final XMLStatementBuilder statementParse = new XMLStatementBuilder(configuration, element, currentNamespace);
-            statementParse.parseStatementNode();
+            final XMLStatementBuilder statementParser = new XMLStatementBuilder(configuration, element, builderAssistant);
+            statementParser.parseStatementNode();
         }
     }
 

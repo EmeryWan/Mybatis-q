@@ -1,7 +1,7 @@
 package cn.letout.mybatis.builder.xml;
 
 import cn.letout.mybatis.builder.BaseBuilder;
-import cn.letout.mybatis.mapping.MappedStatement;
+import cn.letout.mybatis.builder.MapperBuilderAssistant;
 import cn.letout.mybatis.mapping.SqlCommandType;
 import cn.letout.mybatis.mapping.SqlSource;
 import cn.letout.mybatis.scripting.LanguageDriver;
@@ -15,14 +15,14 @@ import java.util.Locale;
  */
 public class XMLStatementBuilder extends BaseBuilder {
 
-    private String currentNamespace;  // cn.letout.mybatis.dao.IUserDao
+    private MapperBuilderAssistant builderAssistant;
 
     private Element element;
 
-    public XMLStatementBuilder(Configuration configuration, Element element, String currentNamespace) {
+    public XMLStatementBuilder(Configuration configuration, Element element, MapperBuilderAssistant builderAssistant) {
         super(configuration);
         this.element = element;
-        this.currentNamespace = currentNamespace;
+        this.builderAssistant = builderAssistant;
     }
 
     // 解析语句(select|insert|update|delete)
@@ -48,7 +48,10 @@ public class XMLStatementBuilder extends BaseBuilder {
         String parameterType = element.attributeValue("parameterType");  // java.lang.Long
         Class<?> parameterTypeClass = resolveAlias(parameterType);
 
-        // 结果类型
+        // 结果类型 resultMap
+        String resultMap = element.attributeValue("resultMap");
+
+        // 结果类型 resultType
         String resultType = element.attributeValue("resultType");  // cn.letout.mybatis.po.User
         Class<?> resultTypeClass = resolveAlias(resultType);
 
@@ -60,18 +63,19 @@ public class XMLStatementBuilder extends BaseBuilder {
         Class<?> langClass = configuration.getLanguageRegistry().getDefaultDriverClass();
         LanguageDriver langDriver = configuration.getLanguageRegistry().getDriver(langClass);
 
+        // 解析成SqlSource，DynamicSqlSource/RawSqlSource
         SqlSource sqlSource = langDriver.createSqlSource(configuration, element, parameterTypeClass);  // StaticSqlSource
 
-        MappedStatement mappedStatement = new MappedStatement.Builder(
-                configuration,
-                currentNamespace + "." + id,  // cn.letout.mybatis.dao.IUserDao.queryUserInfoById
-                sqlCommandType,
+        // 调用助手类处理，便于统一处理参数的包装
+        builderAssistant.addMappedStatement(
+                id,
                 sqlSource,
-                resultTypeClass
-        ).build();
-
-        // 将解析完的语句添加到 Configuration 配置文件中的 Map<String, MappedStatement> 中
-        configuration.addMappedStatement(mappedStatement);
+                sqlCommandType,
+                parameterTypeClass,
+                resultMap,
+                resultTypeClass,
+                langDriver
+        );
     }
 
 }

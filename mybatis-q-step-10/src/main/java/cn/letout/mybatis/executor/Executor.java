@@ -3,6 +3,7 @@ package cn.letout.mybatis.executor;
 import cn.letout.mybatis.mapping.BoundSql;
 import cn.letout.mybatis.mapping.MappedStatement;
 import cn.letout.mybatis.session.ResultHandler;
+import cn.letout.mybatis.session.RowBounds;
 import cn.letout.mybatis.transaction.Transaction;
 
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ public interface Executor {
 
     ResultHandler NO_RESULT_HANDLER = null;
 
-    <E> List<E> query(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
+    <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql);
 
     Transaction getTransaction();
 

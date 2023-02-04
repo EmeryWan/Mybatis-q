@@ -4,8 +4,10 @@ import cn.letout.mybatis.mapping.BoundSql;
 import cn.letout.mybatis.mapping.MappedStatement;
 import cn.letout.mybatis.session.Configuration;
 import cn.letout.mybatis.session.ResultHandler;
+import cn.letout.mybatis.session.RowBounds;
 import cn.letout.mybatis.transaction.Transaction;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,8 +20,9 @@ import java.util.List;
  *
  * Mybatis 还有一些缓存的操作也实现在该类中，占时忽略
  */
-@Slf4j
 public abstract class BaseExecutor implements Executor {
+
+    private Logger log = LoggerFactory.getLogger(BaseExecutor.class);
 
     protected Configuration configuration;
 
@@ -40,14 +43,14 @@ public abstract class BaseExecutor implements Executor {
 
 
     @Override
-    public <E> List<E> query(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+    public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         if (closed) {
             throw new RuntimeException("Executor was closed.");
         }
-        return doQuery(ms, parameter, resultHandler, boundSql);
+        return doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
     }
 
-    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
+    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql);
 
     @Override
     public Transaction getTransaction() {

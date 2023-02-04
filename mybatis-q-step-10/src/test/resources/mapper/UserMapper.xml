@@ -9,4 +9,10 @@
         WHERE id = #{id}
     </select>
 
+    <select id="queryUserInfo" parameterType="cn.letout.mybatis.po.User" resultType="cn.letout.mybatis.po.User">
+        SELECT id, userId, userName, userHead
+        FROM user
+        where id = #{id} and userId = #{userId}
+    </select>
+
 </mapper>
