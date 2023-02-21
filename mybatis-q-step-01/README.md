@@ -9,11 +9,11 @@
 ### 🎨 设计
 
 
-通过使用动态代理的方式，生成对应 interface Mapper 的代理对象，实现对应的逻辑。
+通过使用动态代理的方式，生成对应 `interface Mapper` 的代理对象，实现对应的逻辑。
 
 - `MapperProxy`
 
-映射器 Mapper 的代理类，实现 `InvocationHandler#invoke`，在 `invoke()` 中实现实现具体的代理 SQL 操作（这里暂时是简单示例）。
+映射器 Mapper 的代理类，实现 `InvocationHandler#invoke`，在 `invoke()` 中实现实现具体的代理 SQL 操作。
 
 - `MapperProxyFactory`
 
@@ -23,7 +23,7 @@
 
 ### 💡 结果
 
-ORM 框架的核心：通过动态代理，生成代理对象（代理接口），创建对应 interface Mapper 的代理对象。
+ORM 框架的核心：通过动态代理，生成代理对象（代理接口），创建对应 `interface Mapper` 的代理对象。
 
 完成怎么给一个接口类生成对应的映射器代理，并在代理类中完成用户对接口方法的调用处理。
 

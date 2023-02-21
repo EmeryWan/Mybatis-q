@@ -20,18 +20,19 @@ import java.util.Map;
 public class Configuration {
 
     /**
-     * 环境
+     * 环境 当前数据源 事务工厂等
      */
     protected Environment environment;
 
     /**
      * 映射注册机（用于注册 Mapper 映射器的操作类）
+     * MapperRegistry 中缓存了所有的代理对象工厂，用于创建对应的Mapper代理对象
      */
     protected MapperRegistry mapperRegistry = new MapperRegistry(this);
 
     // 存放映射的语句
     // MappedStatement 用于记录 SQL 信息：SQL 类型、SQL 语句、入参类型、出参类型
-    // key:id->cn.letout.mybatis.dao.IUserDao.queryUserInfoById
+    // key:id->cn.letout.mybatis.dao.IUserDao.queryUserInfoById 一个操作的全限名 接口名+方法名
     protected final Map<String, MappedStatement> mappedStatements = new HashMap<>();
 
     /**
@@ -48,7 +49,8 @@ public class Configuration {
         typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
     }
 
-    //
+
+    // MapperRegistry 操作
 
     public void addMappers(String packageName) {
         mapperRegistry.addMappers(packageName);
@@ -65,7 +67,8 @@ public class Configuration {
     public boolean hasMapper(Class<?> type) {
         return mapperRegistry.hasMapper(type);
     }
-    
+
+
     //
 
     public void addMappedStatement(MappedStatement statement) {

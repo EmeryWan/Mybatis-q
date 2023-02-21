@@ -4,7 +4,7 @@
 ### ❓ 问题
 
 - 添加 Mapper.xml 文件，namespace、sql 及相关参数都在 XML 中配置，而不是硬编码
-- 通过解析 XML
+- 通过解析 XML，获取配置信息
   - 完成 Mapper 的注册（注册代理对象工厂，用于创建 Mapper 的动态代理对象）
   - SQL 相关信息的管理
 
@@ -53,3 +53,4 @@ mybatis-q-step-03
     └── test
 ```
 
+![](../imgs/05/class.png)

@@ -1,12 +1,10 @@
 package cn.letout.mybatis.binding;
 
 import cn.letout.mybatis.session.SqlSession;
-import cn.letout.mybatis.session.SqlSessionFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * 映射器代理类（最终的代理类）
@@ -28,6 +26,10 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     /**
      * 封装操作逻辑，对外接口提供数据库操作对象
      * 暂时提供一个简单的包装，模拟对数据库的调用（最终所有的实际调用都会用到这个方法包装的逻辑）
+     *
+     * Object proxy -> 代理的对象
+     * Method method -> 正在调用的方法
+     * Object[] args -> 正在调用的方法的参数
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

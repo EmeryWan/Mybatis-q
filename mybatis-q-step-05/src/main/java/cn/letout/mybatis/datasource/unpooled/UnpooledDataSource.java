@@ -65,7 +65,7 @@ public class UnpooledDataSource implements DataSource {
 
 
     /**
-     * 驱动代理
+     * 驱动代理（静态代理）
      */
     private static class DriverProxy implements Driver {
 
@@ -159,6 +159,7 @@ public class UnpooledDataSource implements DataSource {
         }
         return connection;
     }
+
 
     //
 

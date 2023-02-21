@@ -35,6 +35,7 @@ public class PooledDataSource implements DataSource {
 
     /**
      * 在被强制返回之前，池中连接被检查的时间
+     * 一次操作超过这个时间，被认为出现问题，回滚这个事务
      */
     protected int poolMaximumCheckoutTime = 20000;
 
@@ -69,6 +70,7 @@ public class PooledDataSource implements DataSource {
 
 
     //
+
 
     /**
      * 回收连接
@@ -222,8 +224,9 @@ public class PooledDataSource implements DataSource {
     }
 
     /**
-     * 强制关闭所有连接
-     * 同时会用户池化资源初始化创建空的连接池
+     * 作用：
+     * 1）强制关闭所有连接
+     * 2）同时会用户池化资源初始化创建空的连接池
      */
     public void forceCloseAll() {
         synchronized (state) {
@@ -265,6 +268,7 @@ public class PooledDataSource implements DataSource {
 
     /**
      * 感知连接心跳
+     * 判断连接是否有用
      */
     protected boolean pingConnection(PooledConnection conn) {
         boolean result = true;

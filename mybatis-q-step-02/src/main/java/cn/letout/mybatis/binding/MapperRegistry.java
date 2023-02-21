@@ -8,9 +8,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 映射器注册机：
- * 提供包路径的扫描和映射器代理类注册机服务
+ * 映射器注册机  Mapper 注册机
  * 完成接口对象的代理类注册处理
+ *
+ * 扫描指定的包路径
+ * MapperProxyFactory 工厂的创建、提供相关服务，注册、获取、判断等
  */
 public class MapperRegistry {
 

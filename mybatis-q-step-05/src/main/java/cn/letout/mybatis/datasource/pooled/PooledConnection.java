@@ -7,8 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * 池化代理的链接
- *
+ * 池化代理的连接
  * 包装代理链接，对具体调用方法进行控制
  */
 public class PooledConnection implements InvocationHandler {
@@ -58,7 +57,7 @@ public class PooledConnection implements InvocationHandler {
         String methodName = method.getName();
         // 如果是调用 CLOSE 关闭链接方法，则将链接加入连接池中，并返回 null
         if (CLOSE.hashCode() == methodName.hashCode() && CLOSE.equals(methodName)) {
-            dataSource.pushConnection(this);
+            dataSource.pushConnection(this);  // 执行回收
             return null;
         } else {
             if (!Object.class.equals(method.getDeclaringClass())) {
@@ -76,6 +75,10 @@ public class PooledConnection implements InvocationHandler {
             throw new SQLException("Error accessing PooledConnection. Connection is invalid.");
         }
     }
+
+
+    //
+
 
     public void invalidate() {
         valid = false;
