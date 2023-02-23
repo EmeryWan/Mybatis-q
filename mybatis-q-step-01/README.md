@@ -37,3 +37,5 @@ mybatis-q-step-01
     │           └── MapperProxyFactory.java  # 对外提供实例化 MapperProxy 的方法，为每个 IDao 接口生成对于的代理类
     └── test
 ```
+
+![](../imgs/01/class.png)

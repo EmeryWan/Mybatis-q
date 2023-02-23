@@ -64,3 +64,5 @@ mybatis-q-step-02
     │               └── SqlSessionFactory.java
     └── test
 ```
+
+![](../imgs/02/class.png)

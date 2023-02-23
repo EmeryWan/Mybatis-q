@@ -10,7 +10,7 @@ public class ParameterMapping {
 
     private Configuration configuration;
 
-    private String property;
+    private String property;  // 参数名称，eg: id
 
     private Class<?> javaType = Object.class;
 

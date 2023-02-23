@@ -1,6 +1,5 @@
 package cn.letout.mybatis.session.defaults;
 
-import cn.letout.mybatis.binding.MapperRegistry;
 import cn.letout.mybatis.mapping.MappedStatement;
 import cn.letout.mybatis.session.Configuration;
 import cn.letout.mybatis.session.SqlSession;

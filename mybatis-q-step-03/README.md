@@ -53,4 +53,4 @@ mybatis-q-step-03
     └── test
 ```
 
-![](../imgs/05/class.png)
+![](../imgs/03/class.png)
