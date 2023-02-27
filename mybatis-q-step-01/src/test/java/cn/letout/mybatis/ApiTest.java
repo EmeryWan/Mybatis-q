@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Slf4j
 public class ApiTest {
-
     @Test
     public void testMapperProxyFactory() {
         MapperProxyFactory<IUserDao> factory = new MapperProxyFactory<>(IUserDao.class);  // 给 IUserDao 添加代理

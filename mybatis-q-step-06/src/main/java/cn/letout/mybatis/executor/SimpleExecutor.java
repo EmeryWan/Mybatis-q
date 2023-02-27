@@ -33,6 +33,7 @@ public class SimpleExecutor extends BaseExecutor {
         try {
             Configuration configuration = ms.getConfiguration();
 
+            // PreparedStatementHandler
             StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, resultHandler, boundSql);
 
             // 获取连接

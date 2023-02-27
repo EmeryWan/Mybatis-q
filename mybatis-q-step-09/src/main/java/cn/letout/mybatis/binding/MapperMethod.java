@@ -80,6 +80,12 @@ public class MapperMethod {
             this.params = Collections.unmodifiableSortedMap(getParams(method));
         }
 
+        /**
+         * SQL 参数
+         * 无参数 -> return null
+         * 一个参数 -> 直接获取一个参数
+         * 多个参数 -> 构建成一个 Map 返回
+         */
         public Object convertArgsToSqlCommandParam(Object[] args) {
             final int paramCount = params.size();
             if (args == null || paramCount == 0) {  // 如果没有参数

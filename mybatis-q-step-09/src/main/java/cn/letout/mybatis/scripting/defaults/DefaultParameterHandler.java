@@ -57,6 +57,7 @@ public class DefaultParameterHandler implements ParameterHandler {
         // 遍历 ParameterMapping 集合，设置参数值
         if (null != parameterMappings) {
             for (int i = 0; i < parameterMappings.size(); i++) {
+                // 获取第 i 个参数的 Mapping（参数id、名称、java类型、jdbc类型，用哪个参数处理器）
                 ParameterMapping parameterMapping = parameterMappings.get(i);
                 String propertyName = parameterMapping.getProperty();
 
@@ -71,6 +72,7 @@ public class DefaultParameterHandler implements ParameterHandler {
                 JdbcType jdbcType = parameterMapping.getJdbcType();
 
                 // 设置参数
+                // 在 ParameterMapping 中已经通过策略模式，根据类型将对应的参数处理器放到成员变量中
                 log.info("根据每个ParameterMapping中的TypeHandler设置对应的参数信息 value：{}", JSON.toJSONString(value));
                 TypeHandler typeHandler = parameterMapping.getTypeHandler();
                 typeHandler.setParameter(ps, i + 1, value, jdbcType);

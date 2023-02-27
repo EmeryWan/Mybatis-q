@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public interface TypeHandler<T> {
 
     /**
-     * 设置参数
+     * 设置参数，给 PreparedStatement 的第 i 个参数设置值 parameter
      * i -> 第几个参数
      * parameter -> 参数值
      */

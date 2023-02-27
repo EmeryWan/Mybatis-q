@@ -20,7 +20,7 @@ public class ParameterMapping {
 
     private JdbcType jdbcType;
 
-    private TypeHandler<?> typeHandler;
+    private TypeHandler<?> typeHandler;  // 类型处理器，用于SQL参数设置，不同的参数类型有不同的类型处理器，注册在 TypeHandlerRegistry，根据类型（策略）获取不同的处理器
 
     private ParameterMapping() {
     }
@@ -50,6 +50,7 @@ public class ParameterMapping {
             if (parameterMapping.typeHandler == null && parameterMapping.javaType != null) {
                 Configuration configuration = parameterMapping.configuration;
                 TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+                // 策略模式，根据不同的类型（策略），获得不同的 typeHandler（LongTypeHandler / StringTypeHandler）
                 parameterMapping.typeHandler = typeHandlerRegistry.getTypeHandler(parameterMapping.javaType, parameterMapping.jdbcType);
             }
 

@@ -2,7 +2,7 @@
 
 在之前的实现中，`DefaultSqlSession` 中直接硬编码了数据库的操作：获取数据源、执行 SQL、封装结果。
 
-我们需要单独提供执行方法的入口，才能更改的应对和扩展不同的需求变化：入参，结果封装，执行器类型，批处理等。
+我们需要单独提供执行方法的入口，才能更改的应对和扩展不同的需求变化：入参设置，结果封装，执行器类型，批处理等。
 
 
 
@@ -12,7 +12,8 @@
 之前的 SQL 执行都耦合到了 SqlSession 中，一旦需要进行扩展，就需要修改 SqlSession，为了降低耦合，将执行 SQL 的逻辑拆分到 SQL Executor。
 
 
-利用模板模式，在 接口（`Executor` `StatementHandler`） 中定义标准流程，并使用 抽象类（`BaseExecutor` `BaseStatementHandler`） 完成通用操作，
+利用模板模式，在 接口（`interface Executor`  `interface StatementHandler`） 中定义标准流程，
+并使用 抽象类（`abstract class BaseExecutor` `abstract class BaseStatementHandler`） 完成通用操作，
 具体的实现交给 子类（`SimpleExecutor` `SimpleStatementHandler` `PreparedStatementHandler`） 实现。
 
 ![](../imgs/06/1.png)
@@ -20,16 +21,23 @@
 
 - 执行器 `Executor`
   
-  - 执行器负责：封装事务、与数据源建立连接、执行方法等
-  - abstract class BaseExecutor，实现接口中的所有通用方法，具体的增删改查实现，由子类自定义实现
-  - 具体实现 SimpleExecutor，继承抽象方法，实现数据库的操作
+  - 执行器负责：封装事务（提交/回滚/关闭）、与数据源建立连接、执行方法等
+  - 开启事务 -> 执行 SQL（通过 StatementHandler） -> 关闭事务
+  - `abstract class BaseExecutor` ，实现接口中的所有通用方法，具体的增删改查实现，由子类自定义实现
+  - 具体实现 `SimpleExecutor`，继承抽象方法，实现数据库的操作
 
 - 语句处理器 `StatementHandler`
+  
+  - `Executor` 的依赖部分，同样使用模板方法模式
+  - 负责：准备语句 -> 设置参数 -> 执行 SQL -> 封装结果
+  - `SimpleStatementHandler` 负责处理没有参数的简单 SQL
+  - `PreparedStatementHandler` 有参数 SQL 的处理器，使用 `PreparedStatement` 设置 SQL，传递参数的设置
+  - 最终的结果封装在 `ResultSetHandler`
 
-  - 负责：准备语句、设置参数、执行 SQL、封装结果。同样使用模板方法模式
-  - SimpleStatementHandler 负责处理没有参数的简单 SQL
-  - PreparedStatementHandler 有参数 SQL 的处理器，使用 PreparedStatement 设置 SQL，传递参数的设置
-  - 最终的结果封装在 ResultSetHandler
+
+---
+
+![](../imgs/06/class.png)
 
 
 ```

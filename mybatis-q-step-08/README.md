@@ -4,44 +4,62 @@
 
 ### 🔧 细化 XML 语句构建器
 
+
+
 之前的实现中，XML 的解析都全部耦合在 `XMLConfigBuilder # mapperElement()` 中，在循环中写了所有的逻辑。
 
-为了各个模块符合单一职责，将功能拆分为：
+
+`XMLConfigBuilder` 解析 XML 中的配置，数据库环境，定位 mapper 的 XML 文件，并调用处理 mapper 的方法。
+
+解析处理在 MyBatis 中使用了 Ognl 的方式（DynamicContext），解析 XML 的过程了解即可。简单实现的话可以用 String 截取或正则匹配等。
+
+
+
+为了各个模块的流程上符合单一职责，细化的功能由不同的构建器 Builder 实现，职责明确
+
+将功能拆分为：
+
+
 
 
 - `XMLMapperBuilder` 映射构建器
 
-  解析各个 XXXMapper.XML 文件，构建接口对应的 Mapper
+  解析 `parse()` 各个 XXXMapper.xml 文件，构建接口对应的 Mapper。
 
+  
+  在 `buildStatementFromContext()` 调用 语句构建器 `XMLStatementBuilder` 相应方法，专门用于解析并构建 SQL 语句相关信息。
 
 
 - `XMLStatementBuilder` 语句构建器
 
-  解析文件，处理 XML 中的 SQL。
+  解析 XML 配置的 SQL 语句相关内容，生成对应的 `MappedStatement` 对象，并放到 `Configuration -> Map` 中。
 
-  具体实现是由 `XMLLanguageDriver` XML 语言驱动器来具体操作 静态 SQL 和 动态 SQL 的解析
+  具体处理是交给 `XMLLanguageDriver` XML 语言驱动器来具体操作 静态 SQL `RawSqlSource` 和 动态 SQL `DynamicSqlSource` 的解析
 
 
 
 - `XMLScriptBuilder` 脚本构建器
- 
-  用于最终实例化原始 SQL 源码对象 RawSqlSource。
-  再 RawSqlSource 中实例化 SqlSourceBuilder
- 
 
+  具体操作 静态 SQL `RawSqlSource` 和 动态 SQL `DynamicSqlSource` 的解析
+ 
+  用于最终实例化原始 SQL 源码对象 `RawSqlSource`
+
+  在 `RawSqlSource` 中实例化 `SqlSourceBuilder`
+ 
+  
+![](../imgs/08/class.png)
+
+
+### 🔍 完善静态 SQL 解析
 
 - `SqlSourceBuilder` SQL 源码构建器
 
   用来具体处理 SQL 中的参数
-  
+
   - 使用 ParameterMappingTokenHandler 获取 #{} 中的参数，存入 BoundSql->parameterMappings
   - 使用 GenericTokenParser 将 #{} 解析成 ? （PreparedStatement）
   - 使用 ParameterExpression 解析 property javaType jdbcType
 
-
-
-
-### 🔍 完善静态 SQL 解析
 
 ```xml
 <!-- 静态 SQL -->
@@ -65,7 +83,7 @@ mybatis-q-step-08
     │           ├── binding
     │           ├── builder
     │           │   ├── xml
-    │           │   │   ├── XMLConfigBuilder.java  
+    │           │   │   ├── XMLConfigBuilder.java  # 解析 XML 配置文件，一些特殊的处理具体的交由各个对应的 Bulider 处理（优点类似于责任链，不同的XML配置交由对应的“处理器”处理）
     │           │   │   ├── XMLMapperBuilder.java  # 解析各个 XXXMapper.xml 文件，提供方法给 XMLConfigBuilder 调用
     │           │   │   └── XMLStatementBuilder.java  # 解析 XML 中的 select / insert / update / delete 语句
     │           │   ├── BaseBuilder.java 
@@ -100,9 +118,9 @@ mybatis-q-step-08
     │           ├── scripting
     │           │   ├── defaults
     │           │   │   ├── DefaultParameterHandler.java
-    │           │   │   └── RawSqlSource.java
+    │           │   │   └── RawSqlSource.java  # 静态 SQL
     │           │   ├── xmltags
-    │           │   │   ├── DynamicContext.java
+    │           │   │   ├── DynamicContext.java  # Ognl
     │           │   │   ├── MixedSqlNode.java
     │           │   │   ├── SqlNode.java
     │           │   │   ├── StaticTextSqlNode.java
