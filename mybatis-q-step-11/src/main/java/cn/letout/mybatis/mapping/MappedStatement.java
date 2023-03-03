@@ -86,4 +86,10 @@ public class MappedStatement {
         return resultMaps;
     }
 
+    //
+
+    public BoundSql getBoundSql(Object parameterObject) {
+        return sqlSource.getBoundSql(parameterObject);
+    }
+
 }

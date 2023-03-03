@@ -24,15 +24,11 @@ public interface StatementHandler {
      */
     void parameterize(Statement statement) throws SQLException;
 
+    int update(Statement statement) throws SQLException;
+
     /**
      * 执行查询
      */
     <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException;
-
-
-    //
-    // MyBatis 源码中还包括 update、批处理、获取参数处理器等
-    // 待后续完成
-    //
 
 }
